@@ -1,10 +1,15 @@
+"use client";
+
 import { OrganizationSwitcher, SignedIn, SignOutButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { TbLogout } from "react-icons/tb";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function Topbar() {
+  const router = useRouter();
+
   return (
     <nav className="topbar">
       <Link href="/" className="flex items-center gap-4">
@@ -13,11 +18,11 @@ function Topbar() {
       </Link>
 
       <div className="flex items-center gap-1">
-        <div className="block">
+        <div className="block md:hidden">
           <SignedIn>
-            <SignOutButton>
+            <SignOutButton signOutCallback={() => router.push("/sign-in")}>
               <div className="flex cursor-pointer">
-                <TbLogout className="text-light-1" size={28} />
+                <TbLogout className="text-light-1" size={24} />
               </div>
             </SignOutButton>
           </SignedIn>
@@ -26,9 +31,7 @@ function Topbar() {
         <OrganizationSwitcher
           appearance={{
             baseTheme: dark,
-            elements: {
-              organizationSwitcherTrigger: "py-2 px-4",
-            },
+            elements: { organizationSwitcherTrigger: "py-2 px-4" },
           }}
         />
       </div>

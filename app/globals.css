@@ -75,11 +75,11 @@
     @apply relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5;
   }
 
-  .leftsidebar {
+  .leftpane {
     @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-dark-4 bg-dark-2 pb-5 pt-28 max-md:hidden;
   }
 
-  .leftsidebar_link {
+  .leftpane_link {
     @apply relative flex justify-start gap-4 rounded-lg p-4;
   }
 
@@ -87,7 +87,7 @@
     @apply mt-10 flex w-full items-center justify-center gap-5;
   }
 
-  .rightsidebar {
+  .rightpane {
     @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-dark-4 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
   }
 }
