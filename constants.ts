@@ -18,8 +18,8 @@ export const sidebarLinks = [
   },
   {
     icon: TbPhotoPlus,
-    route: "/create-thread",
-    label: "Create Thread",
+    route: "/new-thread",
+    label: "New Thread",
   },
   {
     icon: TbUsersGroup,
