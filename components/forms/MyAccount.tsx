@@ -19,6 +19,9 @@ import { z } from "zod";
 import Image from "next/image";
 import { TbPencil, TbPhoto } from "react-icons/tb";
 import { Textarea } from "@/components/ui/textarea";
+import { updateUser } from "@/lib/actions/user.action";
+import { usePathname, useRouter } from "next/navigation";
+import { isBase64Image } from "@/lib/utils";
 
 interface Props {
   user: {
@@ -34,6 +37,9 @@ interface Props {
 function MyAccount({ user }: Props) {
   const [files, setFiles] = useState<File[]>();
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
@@ -44,8 +50,33 @@ function MyAccount({ user }: Props) {
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof UserValidation>) => {
+  const handleSubmit = async (values: z.infer<typeof UserValidation>) => {
     console.log("values :>> ", values);
+    const imageBlob = values.profile_photo;
+
+    const isImageChanged = isBase64Image(imageBlob);
+
+    if (isImageChanged) {
+      console.log("Image has been changed");
+
+      // code to upload image to cloud storage
+
+      values.profile_photo =
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
+    }
+
+    await updateUser(
+      user.id,
+      {
+        username: values.username,
+        name: values.name,
+        image: values.profile_photo,
+        bio: values.bio,
+      },
+      pathname
+    );
+
+    router.push("/");
   };
 
   const handleImage = (

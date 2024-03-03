@@ -4,7 +4,6 @@ import React from "react";
 
 async function Page() {
   const user = await currentUser();
-  console.log("user :>> ", user);
 
   const userInfo = {
     _id: "",
