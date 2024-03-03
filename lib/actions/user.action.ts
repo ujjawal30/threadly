@@ -10,6 +10,16 @@ interface UserData {
   image: string;
 }
 
+export const fetchUser = async (userId: string) => {
+  try {
+    await connectToMongoDB();
+
+    return await User.findOne({ id: userId });
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user: ${error.message}`);
+  }
+};
+
 export const updateUser = async (
   userId: string,
   { username, name, bio, image }: UserData,

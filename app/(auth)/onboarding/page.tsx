@@ -1,17 +1,15 @@
 import MyAccount from "@/components/forms/MyAccount";
+import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 import React from "react";
 
 async function Page() {
   const user = await currentUser();
+  if (!user) return null;
 
-  const userInfo = {
-    _id: "",
-    username: "",
-    name: "",
-    bio: "",
-    image: "",
-  };
+  const userInfo = await fetchUser(user.id);
+  if (userInfo?.onboarded) redirect("/");
 
   const userData = {
     id: user?.id || "",
