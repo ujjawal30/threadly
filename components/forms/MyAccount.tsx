@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserValidation } from "@/lib/validations/user";
@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import Image from "next/image";
-import { TbPhoto } from "react-icons/tb";
+import { TbPencil, TbPhoto } from "react-icons/tb";
 import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
@@ -32,6 +32,8 @@ interface Props {
 }
 
 function MyAccount({ user }: Props) {
+  const [files, setFiles] = useState<File[]>();
+
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
@@ -46,6 +48,27 @@ function MyAccount({ user }: Props) {
     console.log("values :>> ", values);
   };
 
+  const handleImage = (
+    event: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void
+  ) => {
+    event.preventDefault();
+
+    const fileReader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const file = event.target.files[0];
+      setFiles(Array.from(event.target.files));
+
+      fileReader.onload = async (event) => {
+        const imageDataURL = event.target?.result?.toString() || "";
+        fieldChange(imageDataURL);
+      };
+
+      fileReader.readAsDataURL(file);
+    }
+  };
+
   return (
     <Form {...form}>
       <form
@@ -56,27 +79,33 @@ function MyAccount({ user }: Props) {
           control={form.control}
           name="profile_photo"
           render={({ field }) => (
-            <FormItem className="flex items-center gap-4">
-              <FormLabel className="account-form_image-label">
+            <FormItem className="flex items-center justify-center gap-4">
+              <FormLabel className="relative account-form_image-label cursor-pointer">
                 {field.value ? (
                   <Image
                     src={field.value}
                     alt="profile-photo"
-                    width={96}
-                    height={96}
+                    width={112}
+                    height={112}
                     priority
-                    className="rounded-full object-contain"
+                    className="rounded-full object-contain h-full"
                   />
                 ) : (
                   <TbPhoto className="text-light-1" size={24} />
                 )}
+                {field.value && (
+                  <div className="absolute flex justify-center items-center w-full h-full bg-black opacity-0 hover:opacity-50 rounded-full">
+                    <TbPencil className="text-light-1" size={32} />
+                  </div>
+                )}
               </FormLabel>
-              <FormControl className="flex-1 text-base-semibold text-gray-200">
+              <FormControl className="flex-1 text-base-semibold text-gray-200 hidden">
                 <Input
                   type="file"
                   accept="image/*"
                   placeholder="Upload a photo"
                   className="account-form_image-input"
+                  onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
             </FormItem>
