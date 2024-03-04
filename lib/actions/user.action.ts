@@ -22,9 +22,11 @@ export const fetchUser = async (userId: string) => {
 
 export const updateUser = async (
   userId: string,
-  { username, name, bio, image }: UserData,
+  data: UserData,
   path: string
 ) => {
+  const { username, name, bio, image } = data;
+
   try {
     await connectToMongoDB();
 
