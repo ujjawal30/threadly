@@ -1,17 +1,9 @@
 "use client";
 
-import { ObjectId } from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import {
-  TbHeart,
-  TbMessage,
-  TbMessageCircle,
-  TbSend,
-  TbShare2,
-  TbShare3,
-} from "react-icons/tb";
+import { TbHeart, TbMessageCircle, TbSend, TbShare3 } from "react-icons/tb";
 
 interface Props {
   id: string;
@@ -29,9 +21,10 @@ interface Props {
       image: string;
     };
   }[];
+  isComment?: boolean;
 }
 
-async function ThreadCard({
+function ThreadCard({
   id,
   currentUser,
   content,
@@ -39,9 +32,14 @@ async function ThreadCard({
   createdAt,
   parentThread,
   comments,
+  isComment,
 }: Props) {
   return (
-    <article className="flex flex-col w-full rounded-xl bg-dark-2 p-8">
+    <article
+      className={`flex flex-col w-full rounded-xl ${
+        isComment ? "px-0 xs:px-8" : "bg-dark-2 p-8"
+      }`}
+    >
       <div className="flex items-start justify-between">
         <div className="flex w-full flex-1 gap-5">
           <div className="flex flex-col items-center">
@@ -64,7 +62,9 @@ async function ThreadCard({
               </h4>
             </Link>
 
-            <p className="mt-2 text-light-2 text-small-regular">{content}</p>
+            <Link href={`/thread/${id}`}>
+              <p className="mt-2 text-light-2 text-small-regular">{content}</p>
+            </Link>
 
             <div className="mt-5 flex flex-col gap-3">
               <div className="flex gap-3 text-gray-600">

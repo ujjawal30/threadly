@@ -7,8 +7,6 @@ export default async function Home() {
   const { threads, threadsCount } = await fetchThreads();
 
   if (!user) return null;
-  console.log("threads :>> ", threads);
-  console.log("threads :>> ", JSON.parse(JSON.stringify(threads)));
 
   return (
     <div>
@@ -17,17 +15,13 @@ export default async function Home() {
         {threads.length === 0 ? (
           <p className="no-result">No threads found</p>
         ) : (
-          threads?.map((thread) => (
+          threads?.map((thread: any) => (
             <ThreadCard
               key={thread?._id}
-              id={thread.id}
+              id={thread?._id}
               currentUser={user?.id}
               content={thread?.content}
-              author={{
-                id: thread?.author?.id,
-                name: thread?.author?.name,
-                image: thread?.author?.image,
-              }}
+              author={thread?.author}
               createdAt={thread?.createdAt}
               parentThread={thread?.parentThread}
               comments={thread?.comments}
