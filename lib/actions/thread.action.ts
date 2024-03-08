@@ -56,8 +56,71 @@ export const fetchThreads = async () => {
       parentThread: { $in: [null, undefined] },
     });
 
-    return { threads, threadsCount };
+    return { threads: JSON.parse(JSON.stringify(threads)), threadsCount };
   } catch (error: any) {
     throw new Error("Unable to fetch threads: ", error.message);
+  }
+};
+
+export const fetchThreadById = async (id: string) => {
+  try {
+    await connectToMongoDB();
+
+    const thread = await Thread.findById(id)
+      .populate({ path: "author", model: User, select: "_id id name image" })
+      .populate({
+        path: "comments",
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "_id id name image parentThread",
+          },
+          {
+            path: "comments",
+            model: Thread,
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name image parentThread",
+            },
+          },
+        ],
+      });
+
+    console.log("thread :>> ", thread);
+    return JSON.parse(JSON.stringify(thread));
+  } catch (error: any) {
+    throw new Error("Unable to fetch thread: ", error.message);
+  }
+};
+
+export const postComment = async (
+  threadId: string,
+  comment: string,
+  userId: string,
+  path: string
+) => {
+  try {
+    await connectToMongoDB();
+
+    const commentThread = await Thread.create({
+      content: comment,
+      author: userId,
+      parentThread: threadId,
+    });
+
+    // await User.findByIdAndUpdate(userId, {
+    //   $push: { threads: commentThread._id },
+    // });
+
+    await Thread.findByIdAndUpdate(threadId, {
+      $push: { comments: commentThread._id },
+    });
+
+    revalidatePath(path);
+  } catch (error: any) {
+    console.log("error.message :>> ", error.message);
+    throw new Error("Unable to post comment: ", error.message);
   }
 };
