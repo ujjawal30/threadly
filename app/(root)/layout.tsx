@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import Topbar from "../../components/sections/Topbar";
-import Bottombar from "../../components/sections/Bottombar";
-import LeftPane from "../../components/sections/LeftPane";
-import RightPane from "../../components/sections/RightPane";
+import Topbar from "../../components/shared/Topbar";
+import Bottombar from "../../components/shared/Bottombar";
+import LeftPane from "../../components/shared/LeftPane";
+import RightPane from "../../components/shared/RightPane";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

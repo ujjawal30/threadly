@@ -1,7 +1,7 @@
 "use client";
 
 import { sidebarLinks } from "@/constants";
-import { SignOutButton, SignedIn } from "@clerk/nextjs";
+import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
@@ -10,6 +10,7 @@ import { TbLogout } from "react-icons/tb";
 function LeftPane() {
   const router = useRouter();
   const pathname = usePathname();
+  const { userId } = useAuth();
 
   const isActive = (route: string) =>
     (pathname.includes(route) && route.length > 1) || pathname === route;
@@ -19,7 +20,9 @@ function LeftPane() {
       <div className="flex w-full flex-1 flex-col gap-6 px-6">
         {sidebarLinks.map((link) => (
           <Link
-            href={link.route}
+            href={
+              link.route === "/profile" ? `${link.route}/${userId}` : link.route
+            }
             key={link.label}
             className={`leftpane_link ${
               isActive(link.route) && "bg-primary-500"
