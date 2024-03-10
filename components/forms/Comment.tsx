@@ -37,8 +37,6 @@ function Comment({ threadId, userId, userImg }: Props) {
   });
 
   const handleSubmit = async (values: z.infer<typeof CommentValidation>) => {
-    console.log("Thread :>> ", values);
-
     await postComment(threadId, values.thread, userId, pathname);
 
     form.reset();

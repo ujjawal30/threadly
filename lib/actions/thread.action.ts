@@ -104,7 +104,6 @@ export const fetchThreadById = async (id: string) => {
         ],
       });
 
-    console.log("thread :>> ", thread);
     return JSON.parse(JSON.stringify(thread));
   } catch (error: any) {
     throw new Error("Unable to fetch thread: ", error.message);

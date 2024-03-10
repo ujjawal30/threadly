@@ -16,7 +16,6 @@ async function Page({ params }: Props) {
   if (!user) return null;
 
   const userInfo = await fetchUser(params.id);
-  console.log("userInfo :>> ", userInfo);
 
   return (
     <section>

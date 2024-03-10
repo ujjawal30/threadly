@@ -51,7 +51,6 @@ function MyAccount({ user }: Props) {
   });
 
   const handleSubmit = async (values: z.infer<typeof UserValidation>) => {
-    console.log("values :>> ", values);
     const imageBlob = values.profile_photo;
 
     const isImageChanged = isBase64Image(imageBlob);

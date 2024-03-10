@@ -37,8 +37,6 @@ function NewThread({ userId }: Props) {
   });
 
   const handleSubmit = async (values: z.infer<typeof ThreadValidation>) => {
-    console.log("ORG :>> ", organization);
-
     await createThread(
       {
         content: values.thread,

@@ -82,7 +82,6 @@ export const fetchUserThreads = async (userId: string) => {
       ],
     });
 
-    console.log("threads :>> ", threads);
     return JSON.parse(JSON.stringify(threads));
   } catch (error: any) {
     throw new Error("Unable to fetch user threads:", error.message);
