@@ -118,3 +118,28 @@ export const searchUsers = async ({
     throw new Error("Unable to search users:", error.message);
   }
 };
+
+export const fetchActivity = async (userId: string) => {
+  try {
+    await connectToMongoDB();
+
+    const threads = await Thread.find({ author: userId });
+    const commentIds = threads.reduce((acc, curr) => {
+      return acc.concat(curr.comments);
+    }, []);
+
+    const comments = await Thread.find({
+      _id: { $in: commentIds },
+      author: { $ne: userId },
+    }).populate({
+      path: "author",
+      model: User,
+      select: "id name image",
+    });
+
+    return JSON.parse(JSON.stringify(comments));
+  } catch (error: any) {
+    console.log("error.message :>> ", error.message);
+    throw new Error("Unable to fetch user activity:", error.message);
+  }
+};
