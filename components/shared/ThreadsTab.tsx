@@ -24,6 +24,7 @@ async function ThreadsTab({ currentUserId, userId, userType }: Props) {
           content={thread?.content}
           author={{ name: result.name, image: result.image, id: result.id }}
           createdAt={thread?.createdAt}
+          community={thread?.community}
           parentThread={thread?.parentThread}
           comments={thread?.comments}
         />

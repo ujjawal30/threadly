@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -16,6 +17,11 @@ interface Props {
   };
   createdAt: Date;
   parentThread: string | null;
+  community?: {
+    id: string;
+    name: string;
+    image: string;
+  } | null;
   comments: {
     author: {
       image: string;
@@ -31,6 +37,7 @@ function ThreadCard({
   author,
   createdAt,
   parentThread,
+  community,
   comments,
   isComment,
 }: Props) {
@@ -97,6 +104,25 @@ function ThreadCard({
           </div>
         </div>
       </div>
+      {!isComment && (
+        <div className="mt-5 flex items-center">
+          <p className="text-subtle-medium text-gray-1">
+            {formatDate(createdAt)}
+            {community && ` - ${community.name} Community`}
+          </p>
+          {community && (
+            <Link href={`/communities/${community.id}`}>
+              <Image
+                src={community.image}
+                alt={community.name}
+                width={16}
+                height={16}
+                className="ml-1 rounded-full object-cover"
+              />
+            </Link>
+          )}
+        </div>
+      )}
     </article>
   );
 }

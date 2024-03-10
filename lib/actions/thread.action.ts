@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToMongoDB } from "../mongodb";
+import Community from "../models/community.model";
 
 interface ThreadData {
   content: string;
@@ -13,18 +14,27 @@ interface ThreadData {
 
 export const createThread = async (data: ThreadData, path: string) => {
   const { content, author, communityId } = data;
+
   try {
     await connectToMongoDB();
+
+    const community = await Community.findOne({ id: communityId }, { _id: 1 });
 
     const newThread = await Thread.create({
       content,
       author,
-      communityId,
+      community: community || null,
     });
 
     await User.findByIdAndUpdate(author, {
       $push: { threads: newThread._id },
     });
+
+    if (community) {
+      await Community.findByIdAndUpdate(community, {
+        $push: { threads: newThread._id },
+      });
+    }
 
     revalidatePath(path);
   } catch (error: any) {
@@ -43,6 +53,7 @@ export const fetchThreads = async () => {
       .skip(0)
       .limit(20)
       .populate({ path: "author", model: User })
+      .populate({ path: "community", model: Community })
       .populate({
         path: "comments",
         populate: {
@@ -68,6 +79,11 @@ export const fetchThreadById = async (id: string) => {
 
     const thread = await Thread.findById(id)
       .populate({ path: "author", model: User, select: "_id id name image" })
+      .populate({
+        path: "community",
+        model: Community,
+        select: "_id id name image",
+      })
       .populate({
         path: "comments",
         populate: [

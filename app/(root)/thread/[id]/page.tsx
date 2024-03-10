@@ -29,6 +29,7 @@ async function Page({ params }: Props) {
         content={thread?.content}
         author={thread?.author}
         createdAt={thread?.createdAt}
+        community={thread?.community}
         parentThread={thread?.parentThread}
         comments={thread?.comments}
       />
