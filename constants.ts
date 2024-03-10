@@ -1,4 +1,14 @@
-import { TbHome, TbSearch, TbUser, TbUsersGroup, TbPhotoPlus, TbHeart } from "react-icons/tb";
+import {
+  TbHome,
+  TbSearch,
+  TbUser,
+  TbUsersGroup,
+  TbPhotoPlus,
+  TbHeart,
+  TbMessageCircle,
+  TbBrandThreads,
+  TbTag,
+} from "react-icons/tb";
 
 export const sidebarLinks = [
   {
@@ -31,4 +41,10 @@ export const sidebarLinks = [
     route: "/profile",
     label: "Profile",
   },
+];
+
+export const profileTabs = [
+  { value: "threads", label: "Threads", icon: TbBrandThreads },
+  { value: "replies", label: "Replies", icon: TbMessageCircle },
+  { value: "tagged", label: "Tagged", icon: TbTag },
 ];

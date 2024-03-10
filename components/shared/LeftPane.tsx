@@ -25,7 +25,11 @@ function LeftPane() {
             }
             key={link.label}
             className={`leftpane_link ${
-              isActive(link.route) && "bg-primary-500"
+              isActive(
+                link.route === "/profile"
+                  ? `${link.route}/${userId}`
+                  : link.route
+              ) && "bg-primary-500"
             }`}
           >
             <link.icon className="text-light-1" size={24} />

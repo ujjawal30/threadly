@@ -1,5 +1,6 @@
 "use server";
 
+import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToMongoDB } from "../mongodb";
 
@@ -37,5 +38,30 @@ export const updateUser = async (
     );
   } catch (error: any) {
     throw new Error("Unable to update or create user:", error.message);
+  }
+};
+
+export const fetchUserThreads = async (userId: string) => {
+  try {
+    await connectToMongoDB();
+
+    const threads = await User.findOne({ id: userId }).populate({
+      path: "threads",
+      model: Thread,
+      populate: {
+        path: "comments",
+        model: Thread,
+        populate: {
+          path: "author",
+          model: User,
+          select: "id name image",
+        },
+      },
+    });
+
+    console.log("threads :>> ", threads);
+    return JSON.parse(JSON.stringify(threads));
+  } catch (error: any) {
+    throw new Error("Unable to fetch user threads:", error.message);
   }
 };
