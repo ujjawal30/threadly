@@ -42,7 +42,7 @@ async function Page({ params }: Props) {
         />
       </div>
 
-      <div className="flex flex-col gap-4 mt-10">
+      <div className="flex flex-col mt-10">
         {thread.comments.map((comment: any) => (
           <ThreadCard
             key={comment?._id}

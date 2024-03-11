@@ -73,7 +73,7 @@ function ThreadCard({
               <p className="mt-2 text-light-2 text-small-regular">{content}</p>
             </Link>
 
-            <div className="mt-5 flex flex-col gap-3">
+            <div className={`${isComment && "mb-8"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3 text-gray-600">
                 <TbHeart
                   size={20}
@@ -99,6 +99,12 @@ function ThreadCard({
                     {comments.length} replies
                   </p>
                 </Link>
+              )}
+
+              {isComment && (
+                <p className="mt-1 text-subtle-medium text-gray-1">
+                  {formatDate(createdAt)}
+                </p>
               )}
             </div>
           </div>
