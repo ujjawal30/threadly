@@ -1,4 +1,5 @@
 import CommunityCard from "@/components/cards/CommunityCard";
+import Pagination from "@/components/shared/Pagination";
 import Searchbar from "@/components/shared/Searchbar";
 import { fetchCommunities } from "@/lib/actions/community.action";
 import { fetchUser } from "@/lib/actions/user.action";
@@ -48,6 +49,12 @@ async function Page({ searchParams }: Props) {
           ))
         )}
       </div>
+
+      <Pagination
+        isNext={isNext}
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        path="communities"
+      />
     </section>
   );
 }
