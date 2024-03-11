@@ -110,7 +110,7 @@ function ThreadCard({
             {formatDate(createdAt)}
             {community && ` - ${community.name} Community`}
           </p>
-          {/* {community && (
+          {community && (
             <Link href={`/communities/${community.id}`}>
               <Image
                 src={community.image}
@@ -120,7 +120,7 @@ function ThreadCard({
                 className="ml-1 rounded-full object-cover"
               />
             </Link>
-          )} */}
+          )}
         </div>
       )}
     </article>
