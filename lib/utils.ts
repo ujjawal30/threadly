@@ -10,20 +10,19 @@ export function isBase64Image(imageData: string) {
   return base64Regex.test(imageData);
 }
 
-export function formatDate(dateString: Date) {
-  const options: Intl.DateTimeFormatOptions = {
+export function formatDate(dateString: string) {
+  const date = new Date(dateString);
+
+  const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
-  };
+  });
 
-  const date = new Date(dateString);
-  const formattedDate = date.toLocaleDateString(undefined, options);
-
-  const time = date.toLocaleTimeString([], {
+  const formattedTime = date.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
   });
 
-  return `${time} - ${formattedDate}`;
+  return `${formattedTime} - ${formattedDate}`;
 }
