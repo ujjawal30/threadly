@@ -42,16 +42,18 @@ export const createThread = async (data: ThreadData, path: string) => {
   }
 };
 
-export const fetchThreads = async () => {
+export const fetchThreads = async (pageNumber = 1, pageSize = 20) => {
   try {
     await connectToMongoDB();
+
+    const skipAmount = (pageNumber - 1) * pageSize;
 
     const threads = await Thread.find({
       parentThread: { $in: [null, undefined] },
     })
       .sort({ createdAt: "desc" })
-      .skip(0)
-      .limit(20)
+      .skip(skipAmount)
+      .limit(pageSize)
       .populate({ path: "author", model: User })
       .populate({ path: "community", model: Community })
       .populate({
@@ -67,7 +69,9 @@ export const fetchThreads = async () => {
       parentThread: { $in: [null, undefined] },
     });
 
-    return { threads: JSON.parse(JSON.stringify(threads)), threadsCount };
+    const isNext = threadsCount > skipAmount + threads.length;
+
+    return { threads: JSON.parse(JSON.stringify(threads)), isNext };
   } catch (error: any) {
     throw new Error("Unable to fetch threads: ", error.message);
   }
