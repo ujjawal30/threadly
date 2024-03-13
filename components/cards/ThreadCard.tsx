@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { TbHeart, TbMessageCircle, TbSend, TbShare3 } from "react-icons/tb";
+import DeleteButton from "../shared/DeleteButton";
 
 interface Props {
   id: string;
@@ -109,7 +110,16 @@ function ThreadCard({
             </div>
           </div>
         </div>
+
+        <DeleteButton
+          threadId={id}
+          currentUserId={currentUser}
+          authorId={author.id}
+          parentId={parentThread}
+          isComment={isComment}
+        />
       </div>
+
       {!isComment && (
         <div className="mt-5 flex items-center">
           <p className="text-subtle-medium text-gray-1">

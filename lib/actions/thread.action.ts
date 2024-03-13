@@ -143,3 +143,61 @@ export const postComment = async (
     throw new Error("Unable to post comment: ", error.message);
   }
 };
+
+const fetchAllComments = async (threadId: string): Promise<any[]> => {
+  const commentThreads = await Thread.find({ parentThread: threadId });
+
+  const comments = [];
+  for (const commentThread of commentThreads) {
+    const commentReplies = await fetchAllComments(commentThread._id);
+    comments.push(commentThread, ...commentReplies);
+  }
+
+  return comments;
+};
+
+export const deleteThread = async (id: string, path: string) => {
+  try {
+    await connectToMongoDB();
+
+    const mainThread = await Thread.findById(id).populate("author community");
+
+    if (!mainThread) {
+      throw new Error("Thread not found");
+    }
+
+    const comments = await fetchAllComments(id);
+
+    const commentIds = [id, ...comments.map((thread) => thread._id)];
+
+    const uniqueAuthorIds = new Set(
+      [
+        ...comments.map((thread) => thread.author?._id?.toString()),
+        mainThread.author?._id?.toString(),
+      ].filter((id) => id !== undefined)
+    );
+
+    const uniqueCommunityIds = new Set(
+      [
+        ...comments.map((thread) => thread.community?._id?.toString()),
+        mainThread.community?._id?.toString(),
+      ].filter((id) => id !== undefined)
+    );
+
+    await Thread.deleteMany({ _id: { $in: commentIds } });
+
+    await User.updateMany(
+      { _id: { $in: Array.from(uniqueAuthorIds) } },
+      { $pull: { threads: { $in: commentIds } } }
+    );
+
+    await Community.updateMany(
+      { _id: { $in: Array.from(uniqueCommunityIds) } },
+      { $pull: { threads: { $in: commentIds } } }
+    );
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Failed to delete thread: ${error.message}`);
+  }
+};
