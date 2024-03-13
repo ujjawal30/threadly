@@ -1,6 +1,6 @@
 import CommunityCard from "@/components/cards/CommunityCard";
 import Pagination from "@/components/shared/Pagination";
-import Searchbar from "@/components/shared/Searchbar";
+import Searchbar from "@/components/forms/Searchbar";
 import { fetchCommunities } from "@/lib/actions/community.action";
 import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";

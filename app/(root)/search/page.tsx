@@ -1,6 +1,6 @@
 import UserCard from "@/components/cards/UserCard";
 import Pagination from "@/components/shared/Pagination";
-import Searchbar from "@/components/shared/Searchbar";
+import Searchbar from "@/components/forms/Searchbar";
 import { fetchUser, searchUsers } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
