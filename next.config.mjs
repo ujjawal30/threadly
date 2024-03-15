@@ -2,6 +2,9 @@
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["mongoose", "@aws-sdk/client-s3"],
+    serverActions: {
+      bodySizeLimit: "2mb", // Set desired value here
+    },
   },
   images: {
     remotePatterns: [
