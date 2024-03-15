@@ -61,7 +61,11 @@ function MyAccount({ user }: Props) {
       pathname
     );
 
-    router.push("/");
+    if (pathname === "/profile/edit") {
+      router.push(`/profile/${user.id}`);
+    } else {
+      router.push("/");
+    }
   };
 
   const handleImage = (

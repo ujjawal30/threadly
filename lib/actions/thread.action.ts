@@ -213,10 +213,9 @@ export const likeThread = async (
     console.log("threadId :>> ", threadId);
     console.log("userId :>> ", userId);
 
-    const response = await Thread.findByIdAndUpdate(threadId, {
+    await Thread.findByIdAndUpdate(threadId, {
       $push: { likes: userId },
     });
-    console.log("like response :>> ", response);
 
     revalidatePath(path);
   } catch (error: any) {

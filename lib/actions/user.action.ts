@@ -68,7 +68,9 @@ export const updateUser = async (
       { upsert: true }
     );
 
-    revalidatePath(path);
+    if (path === "/profile/edit") {
+      revalidatePath(path);
+    }
   } catch (error: any) {
     throw new Error("Unable to update or create user:", error.message);
   }
