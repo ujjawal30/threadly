@@ -23,13 +23,14 @@ async function Page() {
           activity.map((act: any) => (
             <Link key={act._id} href={`/thread/${act.parentThread}`}>
               <article className="activity-card">
-                <Image
-                  src={act.author.image}
-                  alt="Profile Photo"
-                  width={24}
-                  height={24}
-                  className="rounded-full object-cover"
-                />
+                <div className="relative h-8 w-8">
+                  <Image
+                    src={act.author.image}
+                    alt={act.author.name}
+                    fill
+                    className="cursor-pointer object-cover rounded-full"
+                  />
+                </div>
                 <p className="!text-small-regular text-light-1">
                   <span className="mr-1 text-purple-500">
                     {act.author.name}

@@ -6,12 +6,14 @@ import User from "../models/user.model";
 import { connectToMongoDB } from "../mongodb";
 import { FilterQuery, SortOrder } from "mongoose";
 import Community from "../models/community.model";
+import { isBase64Image } from "../utils";
+import { uploadImagetoS3 } from "../s3client";
 
 interface UserData {
   username: string;
   name: string;
   bio: string;
-  image: string;
+  image: { name: string; url: string; type: string };
 }
 
 interface SearchData {
@@ -41,13 +43,28 @@ export const updateUser = async (
   path: string
 ) => {
   const { username, name, bio, image } = data;
+  let imageUrl = image.url;
+
+  const isImageChanged = isBase64Image(imageUrl);
+
+  if (isImageChanged) {
+    const imageData = image.url.split(",")[1]; // Remove the data URL prefix
+    const imageBuffer = Buffer.from(imageData, "base64");
+    imageUrl = await uploadImagetoS3(imageBuffer, image.name, image.type);
+  }
 
   try {
     await connectToMongoDB();
 
     await User.findOneAndUpdate(
       { id: userId },
-      { name, username: username.toLowerCase(), image, bio, onboarded: true },
+      {
+        name,
+        username: username.toLowerCase(),
+        bio,
+        image: imageUrl,
+        onboarded: true,
+      },
       { upsert: true }
     );
 

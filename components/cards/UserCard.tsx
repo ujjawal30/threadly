@@ -19,13 +19,14 @@ function UserCard({ id, name, username, image, type = "User" }: Props) {
   return (
     <article className="user-card">
       <div className="user-card_avatar">
-        <Image
-          src={image}
-          alt={name}
-          width={48}
-          height={48}
-          className="rounded-full"
-        />
+        <div className="relative h-12 w-12">
+          <Image
+            src={image}
+            alt={name}
+            fill
+            className="cursor-pointer object-cover rounded-full"
+          />
+        </div>
 
         <div className="flex-1 text-ellipsis">
           <h4 className="text-base-semibold text-light-1">{name}</h4>

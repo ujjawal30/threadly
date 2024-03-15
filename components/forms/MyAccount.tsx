@@ -26,7 +26,6 @@ import { isBase64Image } from "@/lib/utils";
 interface Props {
   user: {
     id: string;
-    objectId: string;
     username: string;
     name: string;
     bio: string;
@@ -43,7 +42,7 @@ function MyAccount({ user }: Props) {
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      profile_photo: user?.image || "",
+      profile_photo: { name: "", url: user?.image || "", type: "" },
       name: user?.name || "",
       username: user?.username || "",
       bio: user?.bio || "",
@@ -51,19 +50,6 @@ function MyAccount({ user }: Props) {
   });
 
   const handleSubmit = async (values: z.infer<typeof UserValidation>) => {
-    const imageBlob = values.profile_photo;
-
-    const isImageChanged = isBase64Image(imageBlob);
-
-    if (isImageChanged) {
-      console.log("Image has been changed");
-
-      // code to upload image to cloud storage
-
-      values.profile_photo =
-        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
-    }
-
     await updateUser(
       user.id,
       {
@@ -80,7 +66,15 @@ function MyAccount({ user }: Props) {
 
   const handleImage = (
     event: ChangeEvent<HTMLInputElement>,
-    fieldChange: (value: string) => void
+    fieldChange: ({
+      name,
+      url,
+      type,
+    }: {
+      name?: string;
+      url: string;
+      type?: string;
+    }) => void
   ) => {
     event.preventDefault();
 
@@ -92,7 +86,7 @@ function MyAccount({ user }: Props) {
 
       fileReader.onload = async (event) => {
         const imageDataURL = event.target?.result?.toString() || "";
-        fieldChange(imageDataURL);
+        fieldChange({ name: file.name, url: imageDataURL, type: file.type });
       };
 
       fileReader.readAsDataURL(file);
@@ -110,15 +104,13 @@ function MyAccount({ user }: Props) {
           name="profile_photo"
           render={({ field }) => (
             <FormItem className="flex items-center justify-center gap-4">
-              <FormLabel className="relative account-form_image-label cursor-pointer">
+              <FormLabel className="relative account-form_image-label cursor-pointer h-32 w-32">
                 {field.value ? (
                   <Image
-                    src={field.value}
-                    alt="profile-photo"
-                    width={112}
-                    height={112}
-                    priority
-                    className="rounded-full object-contain h-full"
+                    src={field.value.url}
+                    alt="Profile Photo"
+                    fill
+                    className="cursor-pointer object-cover rounded-full"
                   />
                 ) : (
                   <TbPhoto className="text-light-1" size={24} />

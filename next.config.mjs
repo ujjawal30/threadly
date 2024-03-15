@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverActions: true,
-    serverComponentsExternalPackages: ["mongoose"],
+    serverComponentsExternalPackages: ["mongoose", "@aws-sdk/client-s3"],
   },
   images: {
     remotePatterns: [
@@ -17,6 +16,10 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "icon-library.com",
+      },
+      {
+        protocol: "https",
+        hostname: process.env.AWS_S3_BUCKET_URL,
       },
     ],
   },
