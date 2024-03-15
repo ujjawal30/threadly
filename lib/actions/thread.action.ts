@@ -5,6 +5,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToMongoDB } from "../mongodb";
 import Community from "../models/community.model";
+import { threadId } from "worker_threads";
 
 interface ThreadData {
   content: string;
@@ -199,5 +200,44 @@ export const deleteThread = async (id: string, path: string) => {
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Failed to delete thread: ${error.message}`);
+  }
+};
+
+export const likeThread = async (
+  threadId: string,
+  userId: string,
+  path: string
+) => {
+  try {
+    await connectToMongoDB();
+    console.log("threadId :>> ", threadId);
+    console.log("userId :>> ", userId);
+
+    const response = await Thread.findByIdAndUpdate(threadId, {
+      $push: { likes: userId },
+    });
+    console.log("like response :>> ", response);
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error("Unable to like thread", error.message);
+  }
+};
+
+export const unlikeThread = async (
+  threadId: string,
+  userId: string,
+  path: string
+) => {
+  try {
+    await connectToMongoDB();
+
+    await Thread.findByIdAndUpdate(threadId, {
+      $pull: { likes: userId },
+    });
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error("Unable to unlike thread", error.message);
   }
 };

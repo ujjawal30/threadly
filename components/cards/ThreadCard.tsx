@@ -4,8 +4,17 @@ import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { TbHeart, TbMessageCircle, TbSend, TbShare3 } from "react-icons/tb";
+import {
+  TbHeart,
+  TbHeartFilled,
+  TbMessageCircle,
+  TbSend,
+  TbShare3,
+} from "react-icons/tb";
 import DeleteButton from "../shared/DeleteButton";
+import { usePathname, useRouter } from "next/navigation";
+import { likeThread, unlikeThread } from "@/lib/actions/thread.action";
+import LikesAndComments from "../shared/LikesAndComments";
 
 interface Props {
   id: string;
@@ -28,6 +37,8 @@ interface Props {
       image: string;
     };
   }[];
+  likesCount?: number;
+  isLiked?: boolean;
   isComment?: boolean;
 }
 
@@ -40,8 +51,20 @@ function ThreadCard({
   parentThread,
   community,
   comments,
+  likesCount,
+  isLiked,
   isComment,
 }: Props) {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLike = async () => {
+    await likeThread(id, currentUser, pathname);
+  };
+  const handleUnlike = async () => {
+    await unlikeThread(id, currentUser, pathname);
+  };
+
   return (
     <article
       className={`flex flex-col w-full rounded-xl ${
@@ -76,13 +99,24 @@ function ThreadCard({
 
             <div className={`${isComment && "mb-8"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3 text-gray-600">
-                <TbHeart
-                  size={20}
-                  className="cursor-pointer hover:text-light-3"
-                />
+                {isLiked ? (
+                  <TbHeartFilled
+                    size={20}
+                    className="cursor-pointer hover:text-light-3"
+                    onClick={handleUnlike}
+                    color="red"
+                  />
+                ) : (
+                  <TbHeart
+                    size={20}
+                    className="cursor-pointer hover:text-light-3"
+                    onClick={handleLike}
+                  />
+                )}
                 <TbMessageCircle
                   size={20}
                   className="cursor-pointer hover:text-light-3"
+                  onClick={() => router.push(`/thread/${id}`)}
                 />
                 <TbShare3
                   size={20}
@@ -94,13 +128,10 @@ function ThreadCard({
                 />
               </div>
 
-              {comments.length > 0 && (
-                <Link href={`/thread/${id}`}>
-                  <p className="mt-1 text-subtle-medium text-gray-1">
-                    {comments.length} replies
-                  </p>
-                </Link>
-              )}
+              <LikesAndComments
+                likesCount={likesCount || 0}
+                commentsCount={comments.length || 0}
+              />
 
               {isComment && (
                 <p className="mt-1 text-subtle-medium text-gray-1">

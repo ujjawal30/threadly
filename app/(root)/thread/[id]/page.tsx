@@ -32,6 +32,8 @@ async function Page({ params }: Props) {
         community={thread?.community}
         parentThread={thread?.parentThread}
         comments={thread?.comments}
+        likesCount={thread?.likes.length}
+        isLiked={thread?.likes.includes(user?.id)}
       />
 
       <div className="mt-7">
@@ -53,6 +55,8 @@ async function Page({ params }: Props) {
             createdAt={comment?.createdAt}
             parentThread={comment?.parentThread}
             comments={comment?.comments}
+            likesCount={comment?.likes.length}
+            isLiked={comment?.likes.includes(user?.id)}
             isComment={true}
           />
         ))}

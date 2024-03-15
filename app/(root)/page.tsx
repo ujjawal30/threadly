@@ -35,6 +35,8 @@ export default async function Home({ searchParams }: Props) {
               parentThread={thread?.parentThread}
               community={thread?.community}
               comments={thread?.comments}
+              likesCount={thread?.likes.length}
+              isLiked={thread?.likes.includes(user?.id)}
             />
           ))
         )}

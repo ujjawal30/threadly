@@ -31,6 +31,8 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
           community={thread?.community}
           parentThread={thread?.parentThread}
           comments={thread?.comments}
+          likesCount={thread?.likes.length}
+          isLiked={thread?.likes.includes(currentUserId)}
         />
       ))}
     </section>
