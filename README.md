@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Threads Clone
+
+This project is a clone of Threads, a platform for communication and collaboration, built using Next.js 14. It incorporates various technologies such as MongoDB for database management, AWS S3 for file uploading, Tailwind CSS and Shadcn UI for UI design, and Clerk for user management.
+
+## Technologies Used
+
+- **Next.js 14**
+
+- **MongoDB**
+
+- **AWS S3**
+
+- **Tailwind CSS**
+
+- **Shadcn UI**
+
+- **Clerk**
+
+## Deployed Application
+
+This application is deployed and accessible here.
+
+[threads-clone-bay.vercel.app](https://threads-clone-bay.vercel.app/).
 
 ## Getting Started
 
-First, run the development server:
+To get started with this project, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the repository**: Clone this repository to your local machine using the following command:
+    ```
+    git clone https://github.com/ujjawal30/threads-clone.git
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**: Navigate to the project directory and install the necessary dependencies using npm or yarn:
+    ```
+    cd threads-clone
+    npm install
+    ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Set up environment variables**: Create a `.env` file in the root of your project and add the following environment variables:
+    ```
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+    CLERK_SECRET_KEY=
+    NEXT_CLERK_WEBHOOK_SECRET=
+    
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    MONGODB_URL=
 
-## Learn More
+    AWS_ACCESS_KEY_ID=
+    AWS_SECRET_ACCESS_KEY=
+    AWS_S3_REGION=
+    AWS_S3_BUCKET=
+    AWS_S3_BUCKET_URL=
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Start the development server**: Once the dependencies are installed and environment variables are set, start the development server using the following command:
+    ```
+    npm run dev
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. **Access the application**: Open your web browser and navigate to `http://localhost:3000` to access the Threads clone application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Contributors
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Ujjawal Gupta](https://github.com/ujjawal30)
