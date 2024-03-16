@@ -37,7 +37,7 @@ To get started with this project, follow these steps:
     npm install
     ```
 
-3. **Set up environment variables**: Create a `.env` file in the root of your project and add the following environment variables:
+3. **Set up environment variables**: Create a `.env.local` file in the root of your project and add the following environment variables:
     ```
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
     CLERK_SECRET_KEY=
