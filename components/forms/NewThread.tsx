@@ -18,10 +18,13 @@ import { Textarea } from "../ui/textarea";
 import { z } from "zod";
 import { createThread } from "@/lib/actions/thread.action";
 import { useOrganization } from "@clerk/nextjs";
+import dynamic from "next/dynamic";
 
 interface Props {
   userId: string;
 }
+
+const RichTextField = dynamic(() => import("./RichTextField"), { ssr: false });
 
 function NewThread({ userId }: Props) {
   const router = useRouter();
@@ -49,6 +52,16 @@ function NewThread({ userId }: Props) {
     router.push("/");
   };
 
+  // const handleChange = (
+  //   event: any,
+  //   editor: any,
+  //   fieldChange: (data: string) => void
+  // ) => {
+  //   const newData = editor.getData();
+  //   console.log("newData :>> ", newData);
+  //   fieldChange(newData);
+  // };
+
   return (
     <Form {...form}>
       <form
@@ -65,6 +78,24 @@ function NewThread({ userId }: Props) {
               </FormLabel>
               <FormControl className="no-focus bg-dark-3 text-light-1 border border-dark-3">
                 <Textarea rows={15} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="thread"
+          render={({ field }) => (
+            <FormItem className="flex flex-col gap-2 w-full">
+              <FormLabel className="text-base-semibold text-light-2">
+                Content
+              </FormLabel>
+              <FormControl className="no-focus bg-dark-3 text-light-1 border border-dark-3">
+                <RichTextField
+                  data={field.value}
+                  fieldChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
