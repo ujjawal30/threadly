@@ -5,7 +5,6 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToMongoDB } from "../mongodb";
 import Community from "../models/community.model";
-import { threadId } from "worker_threads";
 
 interface ThreadData {
   content: string;
@@ -238,5 +237,31 @@ export const unlikeThread = async (
     revalidatePath(path);
   } catch (error: any) {
     throw new Error("Unable to unlike thread", error.message);
+  }
+};
+
+export const fetchUserReplies = async (userId: string) => {
+  try {
+    const threadReplies = await Thread.find({}).populate([
+      { path: "author", model: User, select: "id name image" },
+      {
+        path: "comments",
+        match: { author: userId },
+        populate: {
+          path: "author",
+          model: User,
+          select: "id name image",
+        },
+      },
+    ]);
+
+    const sanitizedThreadReplies = threadReplies.filter(
+      (reply) => reply.comments.length
+    );
+
+    return JSON.parse(JSON.stringify(sanitizedThreadReplies));
+  } catch (error: any) {
+    console.error("Unable to fetch user replies", error.message);
+    throw error;
   }
 };

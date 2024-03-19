@@ -1,10 +1,10 @@
 import ProfileHeader from "@/components/shared/ProfileHeader";
+import RepliesTab from "@/components/shared/RepliesTab";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import React from "react";
 
 interface Props {
@@ -43,19 +43,26 @@ async function Page({ params }: Props) {
               </TabsTrigger>
             ))}
           </TabsList>
-          {profileTabs.map((tab) => (
-            <TabsContent
-              key={`content-${tab.value}`}
-              value={tab.value}
-              className="w-full text-light-1"
-            >
-              <ThreadsTab
-                currentUserId={user?.id}
-                accountId={userInfo?.id}
-                accountType="User"
-              />
-            </TabsContent>
-          ))}
+          <TabsContent value="threads" className="w-full text-light-1">
+            <ThreadsTab
+              currentUserId={user?.id}
+              accountId={userInfo?.id}
+              accountType="User"
+            />
+          </TabsContent>
+          <TabsContent value="replies" className="w-full text-light-1">
+            <RepliesTab
+              currentUserId={user?.id}
+              userId={JSON.parse(JSON.stringify(userInfo?._id))}
+            />
+          </TabsContent>
+          <TabsContent value="tagged" className="w-full text-light-1">
+            <ThreadsTab
+              currentUserId={user?.id}
+              accountId={userInfo?.id}
+              accountType="User"
+            />
+          </TabsContent>
         </Tabs>
       </div>
     </section>
