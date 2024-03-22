@@ -49,14 +49,15 @@ function CommunityCard({ id, name, username, image, bio, members }: Props) {
         {members.length > 0 && (
           <div className="flex items-center">
             {members.map((member, index) => (
-              <div key={index} className="relative h-8 w-8">
+              <div
+                key={index}
+                className={`relative h-8 w-8 ${index !== 0 && "-ml-2"}`}
+              >
                 <Image
                   src={member.image}
                   alt={`user ${index}`}
                   fill
-                  className={`${
-                    index !== 0 && "-ml-2"
-                  } rounded-full object-cover`}
+                  className="rounded-full object-cover"
                 />
               </div>
             ))}
