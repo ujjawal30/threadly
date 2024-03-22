@@ -3,7 +3,7 @@
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import {
   TbHeart,
   TbHeartFilled,
@@ -13,7 +13,11 @@ import {
 } from "react-icons/tb";
 import DeleteButton from "../shared/DeleteButton";
 import { usePathname, useRouter } from "next/navigation";
-import { likeThread, unlikeThread } from "@/lib/actions/thread.action";
+import {
+  likeThread,
+  likeUnlikeThread,
+  unlikeThread,
+} from "@/lib/actions/thread.action";
 import LikesAndComments from "../shared/LikesAndComments";
 
 interface Props {
@@ -58,11 +62,11 @@ function ThreadCard({
   const pathname = usePathname();
   const router = useRouter();
 
+  const [likeStatus, setLikeStatus] = useState<boolean>(isLiked || false);
+
   const handleLike = async () => {
-    await likeThread(id, currentUser, pathname);
-  };
-  const handleUnlike = async () => {
-    await unlikeThread(id, currentUser, pathname);
+    setLikeStatus((status) => !status);
+    await likeUnlikeThread(likeStatus, id, currentUser, pathname);
   };
 
   return (
@@ -99,20 +103,15 @@ function ThreadCard({
 
             <div className={`${isComment && "mb-8"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3 text-gray-600">
-                {isLiked ? (
-                  <TbHeartFilled
-                    size={20}
-                    className="cursor-pointer hover:text-light-3"
-                    onClick={handleUnlike}
-                    color="red"
-                  />
-                ) : (
-                  <TbHeart
-                    size={20}
-                    className="cursor-pointer hover:text-light-3"
-                    onClick={handleLike}
-                  />
-                )}
+                <TbHeart
+                  size={20}
+                  className={`cursor-pointer ${
+                    likeStatus
+                      ? "text-red-500 fill-red-500"
+                      : "text-gray-600 hover:text-light-3"
+                  }`}
+                  onClick={handleLike}
+                />
                 <TbMessageCircle
                   size={20}
                   className="cursor-pointer hover:text-light-3"
