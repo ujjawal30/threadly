@@ -22,22 +22,26 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
 
   return (
     <section className="mt-10 flex flex-col gap-10">
-      {result.threads.map((thread: any) => (
-        <ThreadCard
-          key={thread?._id}
-          id={thread?._id}
-          currentUser={currentUserId}
-          content={thread?.content}
-          author={{ name: result.name, image: result.image, id: result.id }}
-          createdAt={thread?.createdAt}
-          community={thread?.community}
-          parentThread={thread?.parentThread}
-          comments={thread?.comments}
-          likesCount={thread?.likes.length}
-          isLiked={thread?.likes.includes(currentUserId)}
-          isSaved={userInfo?.savedThreads?.includes(thread._id) || false}
-        />
-      ))}
+      {result.threads.length === 0 ? (
+        <p className="no-result">No threads found</p>
+      ) : (
+        result.threads.map((thread: any) => (
+          <ThreadCard
+            key={thread?._id}
+            id={thread?._id}
+            currentUser={currentUserId}
+            content={thread?.content}
+            author={{ name: result.name, image: result.image, id: result.id }}
+            createdAt={thread?.createdAt}
+            community={thread?.community}
+            parentThread={thread?.parentThread}
+            comments={thread?.comments}
+            likesCount={thread?.likes.length}
+            isLiked={thread?.likes.includes(currentUserId)}
+            isSaved={userInfo?.savedThreads?.includes(thread._id) || false}
+          />
+        ))
+      )}
     </section>
   );
 }
