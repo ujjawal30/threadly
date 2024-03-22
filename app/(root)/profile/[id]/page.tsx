@@ -1,6 +1,6 @@
 import ProfileHeader from "@/components/shared/ProfileHeader";
-import RepliesTab from "@/components/shared/RepliesTab";
-import ThreadsTab from "@/components/shared/ThreadsTab";
+import RepliesTab from "@/components/tabs/RepliesTab";
+import ThreadsTab from "@/components/tabs/ThreadsTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.action";
