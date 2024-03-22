@@ -1,11 +1,13 @@
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import RepliesTab from "@/components/tabs/RepliesTab";
+import SavedTab from "@/components/tabs/SavedTab";
 import ThreadsTab from "@/components/tabs/ThreadsTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 import React from "react";
+import { TbBookmark } from "react-icons/tb";
 
 interface Props {
   params: { id: string };
@@ -42,6 +44,15 @@ async function Page({ params }: Props) {
                 )}
               </TabsTrigger>
             ))}
+            {user.id === params.id && (
+              <TabsTrigger value="saved" className="tab">
+                <TbBookmark size={24} />
+                <p className="max-sm:hidden">Saved</p>
+                <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
+                  {userInfo?.savedThreads.length}
+                </p>
+              </TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="threads" className="w-full text-light-1">
             <ThreadsTab
@@ -56,13 +67,11 @@ async function Page({ params }: Props) {
               userId={JSON.parse(JSON.stringify(userInfo?._id))}
             />
           </TabsContent>
-          <TabsContent value="tagged" className="w-full text-light-1">
-            <ThreadsTab
-              currentUserId={user?.id}
-              accountId={userInfo?.id}
-              accountType="User"
-            />
-          </TabsContent>
+          {user.id === params.id && (
+            <TabsContent value="saved" className="w-full text-light-1">
+              <SavedTab currentUserId={user?.id} />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </section>

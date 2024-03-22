@@ -9,6 +9,7 @@ import {
   TbBrandThreads,
   TbTag,
   TbUserCog,
+  TbBookmark,
 } from "react-icons/tb";
 
 export const sidebarLinks = [
@@ -47,11 +48,9 @@ export const sidebarLinks = [
 export const profileTabs = [
   { value: "threads", label: "Threads", icon: TbBrandThreads },
   { value: "replies", label: "Replies", icon: TbMessageCircle },
-  { value: "tagged", label: "Tagged", icon: TbTag },
 ];
 
 export const communityTabs = [
   { value: "threads", label: "Threads", icon: TbBrandThreads },
   { value: "members", label: "Members", icon: TbUsersGroup },
-  { value: "manage", label: "Manage", icon: TbUserCog },
 ];
