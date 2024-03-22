@@ -2,7 +2,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
 function Loading() {
-  console.log("Array(5) :>> ", Array(5).fill(""));
   return (
     <div className="flex flex-col gap-10 p-8">
       {Array(5)

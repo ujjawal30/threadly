@@ -5,7 +5,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToMongoDB } from "../mongodb";
 import Community from "../models/community.model";
-import { threadId } from "worker_threads";
+import { UpdateQuery } from "mongoose";
 
 interface ThreadData {
   content: string;
@@ -203,27 +203,8 @@ export const deleteThread = async (id: string, path: string) => {
   }
 };
 
-export const likeThread = async (
-  threadId: string,
-  userId: string,
-  path: string
-) => {
-  try {
-    await connectToMongoDB();
-    console.log("threadId :>> ", threadId);
-    console.log("userId :>> ", userId);
-
-    await Thread.findByIdAndUpdate(threadId, {
-      $push: { likes: userId },
-    });
-
-    revalidatePath(path);
-  } catch (error: any) {
-    throw new Error("Unable to like thread", error.message);
-  }
-};
-
-export const unlikeThread = async (
+export const likeUnlikeThread = async (
+  isLiked: boolean,
   threadId: string,
   userId: string,
   path: string
@@ -231,12 +212,44 @@ export const unlikeThread = async (
   try {
     await connectToMongoDB();
 
-    await Thread.findByIdAndUpdate(threadId, {
-      $pull: { likes: userId },
-    });
+    const data: UpdateQuery<typeof Thread> = isLiked
+      ? {
+          $pull: { likes: userId },
+        }
+      : {
+          $push: { likes: userId },
+        };
+
+    await Thread.findByIdAndUpdate(threadId, data);
 
     revalidatePath(path);
   } catch (error: any) {
     throw new Error("Unable to unlike thread", error.message);
+  }
+};
+
+export const fetchUserReplies = async (userId: string) => {
+  try {
+    const threadReplies = await Thread.find({}).populate([
+      { path: "author", model: User, select: "id name image" },
+      {
+        path: "comments",
+        match: { author: userId },
+        populate: {
+          path: "author",
+          model: User,
+          select: "id name image",
+        },
+      },
+    ]);
+
+    const sanitizedThreadReplies = threadReplies.filter(
+      (reply) => reply.comments.length
+    );
+
+    return JSON.parse(JSON.stringify(sanitizedThreadReplies));
+  } catch (error: any) {
+    console.error("Unable to fetch user replies", error.message);
+    throw error;
   }
 };

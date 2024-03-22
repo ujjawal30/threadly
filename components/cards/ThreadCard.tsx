@@ -3,18 +3,13 @@
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import {
-  TbHeart,
-  TbHeartFilled,
-  TbMessageCircle,
-  TbSend,
-  TbShare3,
-} from "react-icons/tb";
+import React, { useState } from "react";
+import { TbBookmark, TbHeart, TbMessageCircle, TbShare3 } from "react-icons/tb";
 import DeleteButton from "../shared/DeleteButton";
 import { usePathname, useRouter } from "next/navigation";
-import { likeThread, unlikeThread } from "@/lib/actions/thread.action";
+import { likeUnlikeThread } from "@/lib/actions/thread.action";
 import LikesAndComments from "../shared/LikesAndComments";
+import { saveUnsaveThread } from "@/lib/actions/user.action";
 
 interface Props {
   id: string;
@@ -40,6 +35,7 @@ interface Props {
   likesCount?: number;
   isLiked?: boolean;
   isComment?: boolean;
+  isSaved?: boolean;
 }
 
 function ThreadCard({
@@ -54,15 +50,22 @@ function ThreadCard({
   likesCount,
   isLiked,
   isComment,
+  isSaved,
 }: Props) {
   const pathname = usePathname();
   const router = useRouter();
 
+  const [likeStatus, setLikeStatus] = useState<boolean>(isLiked || false);
+  const [saveStatus, setSaveStatus] = useState<boolean>(isSaved || false);
+
   const handleLike = async () => {
-    await likeThread(id, currentUser, pathname);
+    setLikeStatus((status) => !status);
+    await likeUnlikeThread(likeStatus, id, currentUser, pathname);
   };
-  const handleUnlike = async () => {
-    await unlikeThread(id, currentUser, pathname);
+
+  const handleSave = async () => {
+    setSaveStatus((status) => !status);
+    await saveUnsaveThread(saveStatus, id, currentUser, pathname);
   };
 
   return (
@@ -99,33 +102,33 @@ function ThreadCard({
 
             <div className={`${isComment && "mb-8"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3 text-gray-600">
-                {isLiked ? (
-                  <TbHeartFilled
-                    size={20}
-                    className="cursor-pointer hover:text-light-3"
-                    onClick={handleUnlike}
-                    color="red"
-                  />
-                ) : (
-                  <TbHeart
-                    size={20}
-                    className="cursor-pointer hover:text-light-3"
-                    onClick={handleLike}
-                  />
-                )}
+                <TbHeart
+                  size={24}
+                  className={`cursor-pointer ${
+                    likeStatus
+                      ? "text-red-700 fill-red-700 hover:text-red-500 hover:fill-red-500"
+                      : "text-gray-600 hover:text-light-3"
+                  }`}
+                  onClick={handleLike}
+                />
                 <TbMessageCircle
-                  size={20}
+                  size={24}
                   className="cursor-pointer hover:text-light-3"
                   onClick={() => router.push(`/thread/${id}`)}
                 />
                 <TbShare3
-                  size={20}
+                  size={24}
                   className="cursor-pointer hover:text-light-3"
                 />
-                <TbSend
-                  size={20}
-                  className="cursor-pointer hover:text-light-3"
-                />
+                {!isComment && (
+                  <TbBookmark
+                    size={24}
+                    className={`cursor-pointer hover:text-light-3 ${
+                      saveStatus && "fill-gray-600 hover:fill-light-3"
+                    }`}
+                    onClick={handleSave}
+                  />
+                )}
               </div>
 
               <LikesAndComments

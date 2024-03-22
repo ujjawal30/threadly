@@ -8,6 +8,7 @@ import { FilterQuery, SortOrder } from "mongoose";
 import Community from "../models/community.model";
 import { isBase64Image } from "../utils";
 import { uploadImagetoS3 } from "../s3client";
+import { UpdateQuery } from "mongoose";
 
 interface UserData {
   username: string;
@@ -28,10 +29,12 @@ export const fetchUser = async (userId: string) => {
   try {
     await connectToMongoDB();
 
-    return await User.findOne({ id: userId }).populate({
+    const user = await User.findOne({ id: userId }).populate({
       path: "communities",
       model: Community,
     });
+
+    return JSON.parse(JSON.stringify(user));
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`);
   }
@@ -170,5 +173,57 @@ export const fetchActivity = async (userId: string) => {
   } catch (error: any) {
     console.log("error.message :>> ", error.message);
     throw new Error("Unable to fetch user activity:", error.message);
+  }
+};
+
+export const fetchSavedThreads = async (userId: string) => {
+  try {
+    await connectToMongoDB();
+
+    const savedThreads = await User.findOne({ id: userId }).populate({
+      path: "savedThreads",
+      model: Thread,
+      populate: [
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+        },
+        {
+          path: "author",
+          model: User,
+          select: "id name image",
+        },
+      ],
+    });
+
+    return JSON.parse(JSON.stringify(savedThreads));
+  } catch (error: any) {
+    throw new Error("Unable to fetch saved thread", error.message);
+  }
+};
+
+export const saveUnsaveThread = async (
+  isSaved: boolean,
+  threadId: string,
+  userId: string,
+  path: string
+) => {
+  try {
+    await connectToMongoDB();
+
+    const data: UpdateQuery<typeof User> = isSaved
+      ? {
+          $pull: { savedThreads: threadId },
+        }
+      : {
+          $push: { savedThreads: threadId },
+        };
+
+    await User.findOneAndUpdate({ id: userId }, data);
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error("Unable to save/unsave thread", error.message);
   }
 };

@@ -1,6 +1,7 @@
 import ThreadCard from "@/components/cards/ThreadCard";
 import Pagination from "@/components/shared/Pagination";
 import { fetchThreads } from "@/lib/actions/thread.action";
+import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 
 interface Props {
@@ -12,6 +13,8 @@ interface Props {
 export default async function Home({ searchParams }: Props) {
   const user = await currentUser();
   if (!user) return null;
+
+  const userInfo = await fetchUser(user?.id);
 
   const pageNumber = searchParams.page ? +searchParams.page : 1;
 
@@ -37,6 +40,7 @@ export default async function Home({ searchParams }: Props) {
               comments={thread?.comments}
               likesCount={thread?.likes.length}
               isLiked={thread?.likes.includes(user?.id)}
+              isSaved={userInfo?.savedThreads.includes(thread._id) || false}
             />
           ))
         )}

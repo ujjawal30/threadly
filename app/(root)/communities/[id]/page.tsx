@@ -1,6 +1,6 @@
 import UserCard from "@/components/cards/UserCard";
 import ProfileHeader from "@/components/shared/ProfileHeader";
-import ThreadsTab from "@/components/shared/ThreadsTab";
+import ThreadsTab from "@/components/tabs/ThreadsTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { communityTabs } from "@/constants";
 import { fetchCommunityDetails } from "@/lib/actions/community.action";
@@ -64,13 +64,6 @@ async function Page({ params }: Props) {
                 />
               ))}
             </section>
-          </TabsContent>
-          <TabsContent value="manage" className="w-full text-light-1">
-            <ThreadsTab
-              currentUserId={user?.id}
-              accountId={communityDetails?._id}
-              accountType="Community"
-            />
           </TabsContent>
         </Tabs>
       </div>

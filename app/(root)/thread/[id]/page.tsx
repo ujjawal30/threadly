@@ -34,6 +34,7 @@ async function Page({ params }: Props) {
         comments={thread?.comments}
         likesCount={thread?.likes.length}
         isLiked={thread?.likes.includes(user?.id)}
+        isSaved={userInfo?.savedThreads.includes(thread?._id) || false}
       />
 
       <div className="mt-7">
