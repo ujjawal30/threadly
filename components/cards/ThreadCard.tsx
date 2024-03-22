@@ -13,11 +13,7 @@ import {
 } from "react-icons/tb";
 import DeleteButton from "../shared/DeleteButton";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  likeThread,
-  likeUnlikeThread,
-  unlikeThread,
-} from "@/lib/actions/thread.action";
+import { likeUnlikeThread } from "@/lib/actions/thread.action";
 import LikesAndComments from "../shared/LikesAndComments";
 
 interface Props {
