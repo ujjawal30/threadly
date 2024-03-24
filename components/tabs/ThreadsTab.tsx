@@ -23,7 +23,7 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
   return (
     <section className="mt-10 flex flex-col gap-10">
       {result.threads.length === 0 ? (
-        <p className="no-result">No threads found</p>
+        <p className="no-result">No threads posted yet.</p>
       ) : (
         result.threads.map((thread: any) => (
           <ThreadCard
@@ -38,7 +38,7 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
             comments={thread?.comments}
             likesCount={thread?.likes.length}
             isLiked={thread?.likes.includes(currentUserId)}
-            isSaved={userInfo?.savedThreads?.includes(thread._id) || false}
+            isSaved={userInfo?.saved?.includes(thread._id) || false}
           />
         ))
       )}

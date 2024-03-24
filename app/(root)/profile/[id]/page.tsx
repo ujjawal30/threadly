@@ -28,6 +28,9 @@ async function Page({ params }: Props) {
         username={userInfo?.username}
         imageURL={userInfo?.image}
         bio={userInfo?.bio}
+        followerCount={userInfo?.followers.length || 0}
+        followingCount={userInfo?.following.length || 0}
+        isFollowing={userInfo?.followers.includes(user?.id) || false}
       />
 
       <div className="mt-10">
@@ -49,7 +52,7 @@ async function Page({ params }: Props) {
                 <TbBookmark size={24} />
                 <p className="max-sm:hidden">Saved</p>
                 <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
-                  {userInfo?.savedThreads.length}
+                  {userInfo?.saved.length}
                 </p>
               </TabsTrigger>
             )}

@@ -1,7 +1,7 @@
 import UserCard from "@/components/cards/UserCard";
 import Pagination from "@/components/shared/Pagination";
 import Searchbar from "@/components/forms/Searchbar";
-import { fetchUser, searchUsers } from "@/lib/actions/user.action";
+import { fetchUser, fetchUsers } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -13,14 +13,14 @@ interface Props {
 }
 
 async function Page({ searchParams }: Props) {
-  const user = await currentUser();
-  if (!user) return null;
+  const currentLoggedUser = await currentUser();
+  if (!currentLoggedUser) return null;
 
-  const userInfo = await fetchUser(user.id);
+  const userInfo = await fetchUser(currentLoggedUser.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
-  const { users, isNext } = await searchUsers({
-    userId: user.id,
+  const { users, isNext } = await fetchUsers({
+    userId: currentLoggedUser.id,
     searchString: searchParams.q,
     pageNumber: searchParams?.page ? +searchParams.page : 1,
     pageSize: 20,
@@ -39,10 +39,15 @@ async function Page({ searchParams }: Props) {
           users.map((user: any) => (
             <UserCard
               key={user.id}
+              currentUserId={currentLoggedUser.id}
               id={user.id}
               name={user.name}
               username={user.username}
               image={user.image}
+              isFollowing={
+                user.followers.includes(currentLoggedUser.id) &&
+                userInfo.following.includes(user.id)
+              }
             />
           ))
         )}

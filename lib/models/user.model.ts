@@ -19,12 +19,14 @@ const userSchema = new mongoose.Schema({
       ref: "Community",
     },
   ],
-  savedThreads: [
+  saved: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Thread",
     },
   ],
+  followers: [String],
+  following: [String],
 });
 
 const User = mongoose.models?.User || mongoose.model("User", userSchema);

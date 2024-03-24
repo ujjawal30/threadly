@@ -56,6 +56,7 @@ async function Page({ params }: Props) {
               {communityDetails?.members.map((member: any) => (
                 <UserCard
                   key={member._id}
+                  currentUserId={user.id}
                   id={member.id}
                   name={member.name}
                   username={member.username}
