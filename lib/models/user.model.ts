@@ -25,6 +25,8 @@ const userSchema = new mongoose.Schema({
       ref: "Thread",
     },
   ],
+  followers: [String],
+  following: [String],
 });
 
 const User = mongoose.models?.User || mongoose.model("User", userSchema);

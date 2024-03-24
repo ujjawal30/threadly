@@ -227,3 +227,33 @@ export const saveUnsaveThread = async (
     throw new Error("Unable to save/unsave thread", error.message);
   }
 };
+
+export const followUnfollowUser = async (
+  isFollowing: boolean,
+  userId: string,
+  followingId: string,
+  path: string
+) => {
+  if (!userId || !followingId) {
+    throw new Error("Both user and following must be provided");
+  }
+
+  try {
+    await connectToMongoDB();
+
+    const currentUserData: UpdateQuery<typeof User> = isFollowing
+      ? { $pull: { following: followingId } }
+      : { $addToSet: { following: followingId } };
+
+    const followingUserData: UpdateQuery<typeof User> = isFollowing
+      ? { $pull: { followers: userId } }
+      : { $addToSet: { followers: userId } };
+
+    await User.findOneAndUpdate({ id: userId }, currentUserData);
+    await User.findOneAndUpdate({ id: followingId }, followingUserData);
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error("Unable to follow/unfollow thread", error.message);
+  }
+};

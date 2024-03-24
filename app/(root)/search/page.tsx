@@ -13,14 +13,14 @@ interface Props {
 }
 
 async function Page({ searchParams }: Props) {
-  const user = await currentUser();
-  if (!user) return null;
+  const currentLoggedUser = await currentUser();
+  if (!currentLoggedUser) return null;
 
-  const userInfo = await fetchUser(user.id);
+  const userInfo = await fetchUser(currentLoggedUser.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const { users, isNext } = await fetchUsers({
-    userId: user.id,
+    userId: currentLoggedUser.id,
     searchString: searchParams.q,
     pageNumber: searchParams?.page ? +searchParams.page : 1,
     pageSize: 20,
@@ -39,10 +39,15 @@ async function Page({ searchParams }: Props) {
           users.map((user: any) => (
             <UserCard
               key={user.id}
+              currentUserId={currentLoggedUser.id}
               id={user.id}
               name={user.name}
               username={user.username}
               image={user.image}
+              isFollowing={
+                user.followers.includes(currentLoggedUser.id) &&
+                userInfo.following.includes(user.id)
+              }
             />
           ))
         )}

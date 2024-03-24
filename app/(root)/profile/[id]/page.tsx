@@ -28,6 +28,9 @@ async function Page({ params }: Props) {
         username={userInfo?.username}
         imageURL={userInfo?.image}
         bio={userInfo?.bio}
+        followerCount={userInfo?.followers.length || 0}
+        followingCount={userInfo?.following.length || 0}
+        isFollowing={userInfo?.followers.includes(user?.id) || false}
       />
 
       <div className="mt-10">
