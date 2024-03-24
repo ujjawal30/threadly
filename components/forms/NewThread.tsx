@@ -61,7 +61,7 @@ function NewThread({ userId }: Props) {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-2 w-full">
               <FormLabel className="text-base-semibold text-light-2">
-                Content
+                Write your thoughts
               </FormLabel>
               <FormControl className="no-focus bg-dark-3 text-light-1 border border-dark-3">
                 <Textarea rows={15} {...field} />

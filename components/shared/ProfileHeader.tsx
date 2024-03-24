@@ -45,7 +45,7 @@ function ProfileHeader({
 
   return (
     <div className="flex flex-col w-full justify-start">
-      <div className="flex w-full items-center gap-4">
+      <div className="flex w-full items-center gap-4 max-sm:flex-col">
         <div className="relative h-20 w-20 object-cover">
           <Image
             src={imageURL}
@@ -56,12 +56,16 @@ function ProfileHeader({
         </div>
 
         <div className="flex-1">
-          <h2 className="text-left text-heading3-bold text-light-1">{name}</h2>
-          <p className="text-base-medium text-gray-1">@{username}</p>
+          <h2 className="text-left text-heading3-bold text-light-1 max-sm:text-center">
+            {name}
+          </h2>
+          <p className="text-base-medium text-gray-1 max-sm:text-center">
+            @{username}
+          </p>
         </div>
 
         {type === "User" && (
-          <div className="flex gap-6 max-sm:hidden">
+          <div className="flex gap-6 max-sm:w-full max-sm:justify-evenly">
             <div className="text-center">
               <h2 className="text-light-1">{followerCount}</h2>
               <p className="text-gray-1">Followers</p>
@@ -74,7 +78,7 @@ function ProfileHeader({
         )}
       </div>
 
-      {type === "User" && (
+      {/* {type === "User" && (
         <div className="mt-6 w-full justify-evenly flex sm:hidden">
           <div className="text-center">
             <h2 className="text-light-1">0</h2>
@@ -85,7 +89,7 @@ function ProfileHeader({
             <p className="text-gray-1">Followers</p>
           </div>
         </div>
-      )}
+      )} */}
 
       <p className="mt-6 max-w-lg text-base-regular text-light-2">{bio}</p>
 

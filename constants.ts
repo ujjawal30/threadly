@@ -3,13 +3,10 @@ import {
   TbSearch,
   TbUser,
   TbUsersGroup,
-  TbPhotoPlus,
   TbHeart,
   TbMessageCircle,
   TbBrandThreads,
-  TbTag,
-  TbUserCog,
-  TbBookmark,
+  TbEdit,
 } from "react-icons/tb";
 
 export const sidebarLinks = [
@@ -29,7 +26,7 @@ export const sidebarLinks = [
     label: "Activity",
   },
   {
-    icon: TbPhotoPlus,
+    icon: TbEdit,
     route: "/new-thread",
     label: "New Thread",
   },
