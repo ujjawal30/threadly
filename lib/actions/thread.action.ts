@@ -5,7 +5,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToMongoDB } from "../mongodb";
 import Community from "../models/community.model";
-import { UpdateQuery } from "mongoose";
+import { FilterQuery, UpdateQuery } from "mongoose";
 
 interface ThreadData {
   content: string;
@@ -43,15 +43,39 @@ export const createThread = async (data: ThreadData, path: string) => {
   }
 };
 
-export const fetchThreads = async (pageNumber = 1, pageSize = 20) => {
+export const fetchThreads = async (
+  pageNumber = 1,
+  pageSize = 20,
+  following?: string[]
+) => {
   try {
     await connectToMongoDB();
 
     const skipAmount = (pageNumber - 1) * pageSize;
 
-    const threads = await Thread.find({
+    const authors = await User.find({ id: { $in: following } }, { _id: 1 });
+
+    const filter: FilterQuery<typeof Thread> = {
       parentThread: { $in: [null, undefined] },
-    })
+    };
+
+    if (authors.length > 0) {
+      filter.author = { $in: authors };
+    }
+    //************/ Aggregate query /************//
+    // const followingUserThreads = await Thread.aggregate()
+    //   .lookup({
+    //     from: "users",
+    //     localField: "author",
+    //     foreignField: "_id",
+    //     as: "author",
+    //   })
+    //   .match({ "author.id": { $in: following } })
+    //   .unwind("author");
+
+    // console.log("followingUserThreads :>> ", followingUserThreads);
+
+    const threads = await Thread.find(filter)
       .sort({ createdAt: "desc" })
       .skip(skipAmount)
       .limit(pageSize)
@@ -66,13 +90,32 @@ export const fetchThreads = async (pageNumber = 1, pageSize = 20) => {
         },
       });
 
-    const threadsCount = await Thread.countDocuments({
-      parentThread: { $in: [null, undefined] },
-    });
+    const threadsCount = await Thread.countDocuments(filter);
+
+    let suggestedThreads: any;
+    if (threadsCount < 5) {
+      suggestedThreads = await Thread.find({
+        parentThread: { $in: [null, undefined] },
+        _id: { $nin: threads },
+      })
+        .sort({ createdAt: "desc" })
+        .limit(10 - threadsCount)
+
+        .populate({ path: "author", model: User })
+        .populate({ path: "community", model: Community })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "author",
+            model: User,
+            select: "_id name parentThread image",
+          },
+        });
+    }
 
     const isNext = threadsCount > skipAmount + threads.length;
 
-    return { threads: JSON.parse(JSON.stringify(threads)), isNext };
+    return JSON.parse(JSON.stringify({ threads, isNext, suggestedThreads }));
   } catch (error: any) {
     throw new Error("Unable to fetch threads: ", error.message);
   }
