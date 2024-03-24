@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
       ref: "Community",
     },
   ],
-  savedThreads: [
+  saved: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Thread",

@@ -2,14 +2,14 @@ import React from "react";
 import UserCard from "../cards/UserCard";
 import { fetchCommunities } from "@/lib/actions/community.action";
 import { currentUser } from "@clerk/nextjs";
-import { searchUsers } from "@/lib/actions/user.action";
+import { fetchUsers } from "@/lib/actions/user.action";
 
 async function RightPane() {
   const user = await currentUser();
   if (!user) return null;
 
   const suggestedCommunities = await fetchCommunities({ pageSize: 4 });
-  const suggestedUsers = await searchUsers({ userId: user.id, pageSize: 4 });
+  const suggestedUsers = await fetchUsers({ userId: user.id, pageSize: 4 });
 
   return (
     <section className="custom-scrollbar rightpane">

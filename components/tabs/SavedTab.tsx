@@ -11,7 +11,7 @@ async function SavedTab({ currentUserId }: Props) {
 
   return (
     <section className="mt-10 flex flex-col gap-10">
-      {userInfo.savedThreads.map((thread: any) => (
+      {userInfo.saved.map((thread: any) => (
         <ThreadCard
           key={thread?._id}
           id={thread?._id}

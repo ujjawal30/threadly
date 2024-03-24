@@ -1,7 +1,7 @@
 import UserCard from "@/components/cards/UserCard";
 import Pagination from "@/components/shared/Pagination";
 import Searchbar from "@/components/forms/Searchbar";
-import { fetchUser, searchUsers } from "@/lib/actions/user.action";
+import { fetchUser, fetchUsers } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -19,7 +19,7 @@ async function Page({ searchParams }: Props) {
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
-  const { users, isNext } = await searchUsers({
+  const { users, isNext } = await fetchUsers({
     userId: user.id,
     searchString: searchParams.q,
     pageNumber: searchParams?.page ? +searchParams.page : 1,

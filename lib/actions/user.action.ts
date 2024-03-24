@@ -110,7 +110,7 @@ export const fetchUserThreads = async (userId: string) => {
   }
 };
 
-export const searchUsers = async ({
+export const fetchUsers = async ({
   userId,
   searchString = "",
   pageNumber = 1,
@@ -147,7 +147,7 @@ export const searchUsers = async ({
 
     return { users: JSON.parse(JSON.stringify(users)), isNext };
   } catch (error: any) {
-    throw new Error("Unable to search users:", error.message);
+    throw new Error("Unable to fetch users:", error.message);
   }
 };
 
@@ -181,7 +181,7 @@ export const fetchSavedThreads = async (userId: string) => {
     await connectToMongoDB();
 
     const savedThreads = await User.findOne({ id: userId }).populate({
-      path: "savedThreads",
+      path: "saved",
       model: Thread,
       populate: [
         {
@@ -214,10 +214,10 @@ export const saveUnsaveThread = async (
 
     const data: UpdateQuery<typeof User> = isSaved
       ? {
-          $pull: { savedThreads: threadId },
+          $pull: { saved: threadId },
         }
       : {
-          $push: { savedThreads: threadId },
+          $push: { saved: threadId },
         };
 
     await User.findOneAndUpdate({ id: userId }, data);

@@ -40,7 +40,7 @@ export default async function Home({ searchParams }: Props) {
               comments={thread?.comments}
               likesCount={thread?.likes.length}
               isLiked={thread?.likes.includes(user?.id)}
-              isSaved={userInfo?.savedThreads.includes(thread._id) || false}
+              isSaved={userInfo?.saved.includes(thread._id) || false}
             />
           ))
         )}

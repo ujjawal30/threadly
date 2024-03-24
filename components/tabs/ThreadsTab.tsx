@@ -38,7 +38,7 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
             comments={thread?.comments}
             likesCount={thread?.likes.length}
             isLiked={thread?.likes.includes(currentUserId)}
-            isSaved={userInfo?.savedThreads?.includes(thread._id) || false}
+            isSaved={userInfo?.saved?.includes(thread._id) || false}
           />
         ))
       )}
