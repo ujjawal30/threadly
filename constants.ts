@@ -27,7 +27,7 @@ export const sidebarLinks = [
   },
   {
     icon: TbEdit,
-    route: "/new-thread",
+    route: "/thread/new",
     label: "New Thread",
   },
   {
