@@ -20,7 +20,7 @@ This project is a clone of Threads, a platform for communication and collaborati
 
 This application is deployed and accessible here.
 
-[threads-clone-bay.vercel.app](https://threads-clone-bay.vercel.app/).
+[threadly-web.vercel.app](https://threadly-web.vercel.app/).
 
 ## Getting Started
 
