@@ -10,9 +10,23 @@ import { dark } from "@clerk/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "Threads",
-  description: "Threads Clone",
+export const metadata: Metadata = {
+  title: "Threadly",
+  description: "A clone of Threads application by Meta",
+  icons: {
+    icon: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/logo-light.png",
+        href: "/logo-light.png",
+      },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/logo-dark.png",
+        href: "/logo-dark.png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

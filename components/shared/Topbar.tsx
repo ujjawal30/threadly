@@ -6,15 +6,24 @@ import { TbLogout } from "react-icons/tb";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+});
 
 function Topbar() {
   const router = useRouter();
 
   return (
     <nav className="topbar">
-      <Link href="/" className="flex items-center gap-4">
-        <Image src="/logo.svg" alt="logo" width={28} height={28} />
-        <p className="text-heading3-bold text-light-1 max-xs:hidden">Threads</p>
+      <Link href="/" className="flex items-center gap-3">
+        <Image src="/logo-dark.png" alt="logo" width={48} height={48} />
+        <p
+          className={`text-heading2-bold text-light-1 max-xs:hidden ${montserrat.className}`}
+        >
+          Threadly
+        </p>
       </Link>
 
       <div className="flex items-center gap-1">
