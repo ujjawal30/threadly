@@ -29,13 +29,13 @@ To get started with this project, follow these steps:
 1. **Clone the repository**: Clone this repository to your local machine using the following command:
 
    ```
-   git clone https://github.com/ujjawal30/threads-clone.git
+   https://github.com/ujjawal30/threadly.git
    ```
 
 2. **Install dependencies**: Navigate to the project directory and install the necessary dependencies using npm or yarn:
 
    ```
-   cd threads-clone
+   cd threadly
    npm install
    ```
 
