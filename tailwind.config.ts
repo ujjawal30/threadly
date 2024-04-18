@@ -175,7 +175,7 @@ const config = {
     },
     extend: {
       colors: {
-        "primary-500": "#0051ff",
+        "primary-500": "#5965c7",
         "secondary-500": "#FFB620",
         blue: "#0095F6",
         "logout-btn": "#FF5A5A",

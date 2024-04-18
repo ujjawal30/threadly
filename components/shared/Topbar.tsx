@@ -18,7 +18,7 @@ function Topbar() {
   return (
     <nav className="topbar">
       <Link href="/" className="flex items-center gap-3">
-        <Image src="/logo-dark.png" alt="logo" width={48} height={48} />
+        <Image src="/logo.png" alt="logo" width={48} height={48} />
         <p
           className={`text-heading2-bold text-light-1 max-xs:hidden ${montserrat.className}`}
         >
