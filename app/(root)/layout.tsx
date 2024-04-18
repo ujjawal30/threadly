@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import Topbar from "../../components/shared/Topbar";
 import Bottombar from "../../components/shared/Bottombar";
@@ -8,25 +8,11 @@ import RightPane from "../../components/shared/RightPane";
 import "../globals.css";
 import { dark } from "@clerk/themes";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Threadly",
   description: "A clone of Threads application by Meta",
-  icons: {
-    icon: [
-      {
-        media: "(prefers-color-scheme: light)",
-        url: "/logo-light.png",
-        href: "/logo-light.png",
-      },
-      {
-        media: "(prefers-color-scheme: dark)",
-        url: "/logo-dark.png",
-        href: "/logo-dark.png",
-      },
-    ],
-  },
 };
 
 export default function RootLayout({
@@ -37,7 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={montserrat.className}>
           <Topbar />
 
           <main className="flex flex-row">
